@@ -78,8 +78,7 @@ class SolutionDijkstra:
         probabilities = [-float("inf")] * n
         is_traveled = [False] * n
         probabilities[start] = 1
-        run_again = True
-        while run_again:
+        while True:
             probabilities_untraveled = [x for x, y in zip(probabilities, is_traveled) if (y is False)]
             if not probabilities_untraveled:
                 break
@@ -88,12 +87,14 @@ class SolutionDijkstra:
             edges_to_neighbor_from_current_point = []
             for edge in edges:
                 if current_point_index in edge:
-                    if edge[0] == current_point_index:
+                    if edge[0] == current_point_index and is_traveled[edge[1]] is False:
                         neighbor_point_indexes.append(edge[1])
                         edges_to_neighbor_from_current_point.append(edge)
-                    else:
+                    elif edge[1] == current_point_index and is_traveled[edge[0]] is False:
                         neighbor_point_indexes.append(edge[0])
                         edges_to_neighbor_from_current_point.append(edge)
+            if not edges_to_neighbor_from_current_point:
+                break
             for neighbor_point_index, edge_to_neighbor in zip(neighbor_point_indexes,
                                                               edges_to_neighbor_from_current_point):
                 current_point_probability = probabilities[current_point_index]
@@ -101,6 +102,8 @@ class SolutionDijkstra:
                 if current_point_probability * current_edge_probability > probabilities[neighbor_point_index]:
                     probabilities[neighbor_point_index] = current_point_probability * current_edge_probability
             is_traveled[current_point_index] = True
+            if current_point_index == end:
+                break
 
         if probabilities[end] == -float("inf"):
             return 0
@@ -109,13 +112,15 @@ class SolutionDijkstra:
 
 
 s = SolutionDijkstra()
-print("Example 1: ")
-print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.2], 0, 2))
-print("Example 2: ")
-print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.3], 0, 2))
-print("Example 3: ")
-print(s.maxProbability(3, [[0, 1]], [0.5], 0, 2))
-print("Example 4: ")
-print(s.maxProbability(5, [[0, 1], [0, 2], [1, 3], [3, 4]], [0.5, 0.3, 0.2, 0.1], 0, 2))
-print("Example 5: ")
-print(s.maxProbability(4, [[0, 1], [1, 2], [2, 3]], [0.5, 0.5, 0.5, 0.5], 0, 3))
+# print("Example 1: ")
+# print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.2], 0, 2))
+# print("Example 2: ")
+# print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.3], 0, 2))
+# print("Example 3: ")
+# print(s.maxProbability(3, [[0, 1]], [0.5], 0, 2))
+# print("Example 4: ")
+# print(s.maxProbability(5, [[0, 1], [0, 2], [1, 3], [3, 4]], [0.5, 0.3, 0.2, 0.1], 0, 2))
+# print("Example 5: ")
+# print(s.maxProbability(4, [[0, 1], [1, 2], [2, 3]], [0.5, 0.5, 0.5, 0.5], 0, 3))
+print("Example 6: ")
+print(s.maxProbability(10, [[0, 3], [1, 7], [1, 2], [0, 9]], [0.31, 0.9, 0.86, 0.36], 2, 3))
