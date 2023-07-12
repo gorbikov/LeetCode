@@ -60,7 +60,55 @@ class Solution:
             return calculate_max_prob(possible_paths, edges, succProb)
 
 
-s = Solution()
+# s = Solution()
+# print("Example 1: ")
+# print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.2], 0, 2))
+# print("Example 2: ")
+# print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.3], 0, 2))
+# print("Example 3: ")
+# print(s.maxProbability(3, [[0, 1]], [0.5], 0, 2))
+# print("Example 4: ")
+# print(s.maxProbability(5, [[0, 1], [0, 2], [1, 3], [3, 4]], [0.5, 0.3, 0.2, 0.1], 0, 2))
+# print("Example 5: ")
+# print(s.maxProbability(4, [[0, 1], [1, 2], [2, 3], [3, 4]], [0.5, 0.5, 0.5, 0.5], 0, 3))
+
+
+class SolutionDijkstra:
+    def maxProbability(self, n: int, edges: list[list[int]], succProb: list[float], start: int, end: int) -> float:
+        probabilities = [-float("inf")] * n
+        is_traveled = [False] * n
+        probabilities[start] = 1
+        run_again = True
+        while run_again:
+            probabilities_untraveled = [x for x, y in zip(probabilities, is_traveled) if (y is False)]
+            if not probabilities_untraveled:
+                break
+            current_point_index = probabilities.index(max(probabilities_untraveled))
+            neighbor_point_indexes = []
+            edges_to_neighbor_from_current_point = []
+            for edge in edges:
+                if current_point_index in edge:
+                    if edge[0] == current_point_index:
+                        neighbor_point_indexes.append(edge[1])
+                        edges_to_neighbor_from_current_point.append(edge)
+                    else:
+                        neighbor_point_indexes.append(edge[0])
+                        edges_to_neighbor_from_current_point.append(edge)
+            for neighbor_point_index, edge_to_neighbor in zip(neighbor_point_indexes,
+                                                              edges_to_neighbor_from_current_point):
+                current_point_probability = probabilities[current_point_index]
+                current_edge_probability = succProb[edges.index(edge_to_neighbor)]
+                if current_point_probability * current_edge_probability > probabilities[neighbor_point_index]:
+                    probabilities[neighbor_point_index] = current_point_probability * current_edge_probability
+            is_traveled[current_point_index] = True
+
+        if probabilities[end] == -float("inf"):
+            return 0
+        else:
+            return probabilities[end]
+
+
+s = SolutionDijkstra()
 print("Example 1: ")
 print(s.maxProbability(3, [[0, 1], [1, 2], [0, 2]], [0.5, 0.5, 0.2], 0, 2))
 print("Example 2: ")
@@ -70,4 +118,4 @@ print(s.maxProbability(3, [[0, 1]], [0.5], 0, 2))
 print("Example 4: ")
 print(s.maxProbability(5, [[0, 1], [0, 2], [1, 3], [3, 4]], [0.5, 0.3, 0.2, 0.1], 0, 2))
 print("Example 5: ")
-print(s.maxProbability(4, [[0, 1], [1, 2], [2, 3], [3, 4]], [0.5, 0.5, 0.5, 0.5], 0, 3))
+print(s.maxProbability(4, [[0, 1], [1, 2], [2, 3]], [0.5, 0.5, 0.5, 0.5], 0, 3))
