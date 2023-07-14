@@ -57,7 +57,33 @@ class Solution:
             return result
 
 
-s = Solution()
+class SolutionDP:
+    def longestSubsequence(self, arr: list[int], difference: int) -> int:
+        sequences = defaultdict(list)
+        for curr_pos, curr_val in enumerate(arr):
+            for next_pos, next_val in enumerate(arr):
+                if next_pos <= curr_pos:
+                    pass
+                else:
+                    if curr_val + difference == next_val:
+                        pair = [curr_val, next_val]
+                        start_pos_of_pair = curr_pos
+                        end_pos_of_pair = next_pos
+                        if not sequences:
+                            sequences[end_pos_of_pair] = pair
+                        else:
+                            for end_in_seq in sequences:
+                                if end_in_seq == start_pos_of_pair:
+                                    for seq_with_curr_end in sequences[end_in_seq]:
+                                        seq_with_curr_end = seq_with_curr_end + pair[1]
+                                        sequences[end_pos_of_pair] = sequences[end_in_seq]
+                                    del sequences[end_in_seq]
+                                else:
+                                    sequences[end_pos_of_pair] = pair
+
+        print(sequences)
+
+s = SolutionDP()
 print("Example 1: ")
 print(s.longestSubsequence([1, 2, 3, 4], 1))  # 4
 print("Example 2: ")
