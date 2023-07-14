@@ -1,14 +1,12 @@
 class Solution:
     def twoSum(self, nums: list[int], target: int) -> list[int]:
         set_of_numbers: dict = {}
-        print(type(set_of_numbers))
         for position1, value1 in enumerate(nums):
             target_minus_first_value = target - value1
             if target_minus_first_value in set_of_numbers:
                 return [set_of_numbers[target_minus_first_value], position1]
             else:
                 set_of_numbers[nums[position1]] = position1
-
 
 
 s = Solution()

@@ -70,18 +70,28 @@ class SolutionDP:
                         start_pos_of_pair = curr_pos
                         end_pos_of_pair = next_pos
                         if not sequences:
-                            sequences[end_pos_of_pair] = pair
+                            sequences[end_pos_of_pair] = [pair]
                         else:
-                            for end_in_seq in sequences:
+                            for end_in_seq in list(sequences.keys()):
                                 if end_in_seq == start_pos_of_pair:
-                                    for seq_with_curr_end in sequences[end_in_seq]:
-                                        seq_with_curr_end = seq_with_curr_end + pair[1]
-                                        sequences[end_pos_of_pair] = sequences[end_in_seq]
+                                    for num, seq_with_curr_end in enumerate(sequences[end_in_seq]):
+                                        sequences[end_in_seq][num] = sequences[end_in_seq][num] + [pair[1]]
+                                    sequences[end_pos_of_pair] = sequences[end_in_seq]
                                     del sequences[end_in_seq]
                                 else:
-                                    sequences[end_pos_of_pair] = pair
-
+                                    # TODO Что-то тут не так.
+                                    sequences[end_pos_of_pair] = sequences[end_pos_of_pair] + [pair]
         print(sequences)
+        if not sequences:
+            return 1
+        else:
+            result = 1
+            for end in sequences:
+                for seq in sequences[end]:
+                    if len(seq) > result:
+                        result = len(seq)
+            return result
+
 
 s = SolutionDP()
 print("Example 1: ")
@@ -92,3 +102,5 @@ print("Example 3: ")
 print(s.longestSubsequence([1, 5, 7, 8, 5, 3, 4, 2, 1], -2))  # 4
 print("Example 4: ")
 print(s.longestSubsequence([1, 2, 3, 4, 8, 9, 10, 11, 12, 13], 1))  # 6
+print("Example 5: ")
+print(s.longestSubsequence([7, -2, 8, 10, 6, 18, 9, -8, -5, 18, 13, -6, -17, -1, -6, -9, 9, 9], 1))  # 3
