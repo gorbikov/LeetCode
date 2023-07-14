@@ -84,11 +84,31 @@ class SolutionDP:
                                 else:
                                     if len(sequences[end_pos_of_pair]) < 2:
                                         sequences[end_pos_of_pair] = pair
-        # print(sequences)
+        print(sequences)
         return result
 
 
-s = SolutionDP()
+class SolutionSuperFast:
+    def longestSubsequence(self, arr: list[int], difference: int) -> int:
+        sequences = {}
+        arr_length = len(arr)
+        result = 1
+
+        for i in range(arr_length):
+            val = arr[i]
+            search_val = val - difference
+
+            if search_val in sequences:
+                sequences[val] = sequences[search_val] + 1
+            else:
+                sequences[val] = 1
+
+            result = max(result, sequences[val])
+
+        return result
+
+
+s = SolutionSuperFast()
 print("Example 1: ")
 print(s.longestSubsequence([1, 2, 3, 4], 1))  # 4
 print("Example 2: ")
