@@ -60,6 +60,7 @@ class Solution:
 class SolutionDP:
     def longestSubsequence(self, arr: list[int], difference: int) -> int:
         sequences = defaultdict(list)
+        result = 1
         for curr_pos, curr_val in enumerate(arr):
             for next_pos, next_val in enumerate(arr):
                 if next_pos <= curr_pos:
@@ -70,27 +71,21 @@ class SolutionDP:
                         start_pos_of_pair = curr_pos
                         end_pos_of_pair = next_pos
                         if not sequences:
-                            sequences[end_pos_of_pair] = [pair]
+                            sequences[end_pos_of_pair] = pair
+                            result = 2
                         else:
                             for end_in_seq in list(sequences.keys()):
                                 if end_in_seq == start_pos_of_pair:
-                                    for num, seq_with_curr_end in enumerate(sequences[end_in_seq]):
-                                        sequences[end_in_seq][num] = sequences[end_in_seq][num] + [pair[1]]
+                                    sequences[end_in_seq] = sequences[end_in_seq] + [pair[1]]
+                                    if len(sequences[end_in_seq]) > result:
+                                        result = len(sequences[end_in_seq])
                                     sequences[end_pos_of_pair] = sequences[end_in_seq]
                                     del sequences[end_in_seq]
                                 else:
-                                    # TODO Что-то тут не так.
-                                    sequences[end_pos_of_pair] = sequences[end_pos_of_pair] + [pair]
-        print(sequences)
-        if not sequences:
-            return 1
-        else:
-            result = 1
-            for end in sequences:
-                for seq in sequences[end]:
-                    if len(seq) > result:
-                        result = len(seq)
-            return result
+                                    if len(sequences[end_pos_of_pair]) < 2:
+                                        sequences[end_pos_of_pair] = pair
+        # print(sequences)
+        return result
 
 
 s = SolutionDP()
