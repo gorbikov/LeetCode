@@ -9,15 +9,10 @@ class Solution:
         return result
 
 
-
-
-
-
-
 s = Solution()
 print("Example 1: ")
-print(s.convert("PAYPALISHIRING", 3)) # PAHNAPLSIIGYIR
+print(s.convert("PAYPALISHIRING", 3))  # PAHNAPLSIIGYIR
 print("Example 2: ")
-print(s.convert("PAYPALISHIRING", 4)) #PINALSIGYAHRPI
+print(s.convert("PAYPALISHIRING", 4))  # PINALSIGYAHRPI
 print("Example 2: ")
-print(s.convert("A", 1)) #A
+print(s.convert("A", 1))  # A
