@@ -23,7 +23,6 @@ class Solution2:
                 while curr_left >= height[left] and left < right:
                     left += 1
                 result = max(result, min(height[left], height[right]) * (right - left))
-
         return result
 
 
