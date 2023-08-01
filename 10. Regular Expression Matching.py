@@ -1,7 +1,5 @@
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
-        p =
-
         if s == "" and len(p) == 2 and p[1] == "*":
             return True
         if s == "" and len(p) > 2 and p[1] == "*":
@@ -12,6 +10,8 @@ class Solution:
             return False
         elif s != "" and p == "":
             return False
+        elif len(p) >= 4 and p[1] == "*" and p[:2] == p[2:4]:
+            return self.isMatch(s, p[2:])
         elif len(p) >= 2 and p[1] == "*":
             if s[0] == p[0] or p[0] == ".":
                 return self.isMatch(s[1:], p) or self.isMatch(s, p[2:])
@@ -41,4 +41,4 @@ print(s.isMatch("aaa", "ab*a*c*a"))  # True
 print("Example 8: ")
 print(s.isMatch("aabcbcbcaccbcaabc", ".*a*aa*.*b*.c*.*a*"))  # True
 print("Example 9: ")
-print(s.isMatch("aaaaaaaaaaaaaaaaaaab", "a*a*a*a*a*a*a*a*a*a*"))  # True
+print(s.isMatch("aaaaaaaaaaaaaaaaaaab", "a*a*a*a*a*a*a*a*a*a*"))  # False
