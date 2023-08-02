@@ -27,3 +27,5 @@ print("Example 2: ")
 print(s.combine(1, 1))  # [[1]]
 print("Example 3: ")
 print(s.combine(4, 3))  # [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
+print("Example 4: ")
+print(s.combine(3, 3))  # [[1,2,3],[1,2,4],[1,3,4],[2,3,4]]
