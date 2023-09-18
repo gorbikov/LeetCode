@@ -104,12 +104,13 @@ class Solution:
         return result
 '''
 
-
+'''
 class Solution:
     def minCostConnectPoints(self, points: list[list[int]]) -> int:
         k = len(points)
         if k == 0:
             return 0
+
         graph = defaultdict(list[list[int]])
         for num1, point1 in enumerate(points):
             for num2, point2 in enumerate(points):
@@ -117,18 +118,49 @@ class Solution:
                     graph[num1].append([abs(point1[0] - point2[0]) + abs(point1[1] - point2[1]), num2])
 
         result = 0
-        visited = [0]
+        visited = set([0])
         heapify(graph[0])
         for i in range(k - 1):
             while graph[0][0][1] in visited:
                 heappop(graph[0])
-            visited.append(graph[0][0][1])
-            visit = graph[0][0][1]
             result += graph[0][0][0]
-            for el in graph[graph[0][0][1]]:
-                if el not in graph[0]:
-                    heappush(graph[0], el)
-            graph.pop(visit)
+            next_visit = graph[0][0][1]
+            graph[0] += graph[next_visit]
+            heapify(graph[0])
+            visited.add(next_visit)
+            graph.pop(next_visit)
+
+        return result
+'''
+
+
+class Solution:
+    def minCostConnectPoints(self, points: list[list[int]]) -> int:
+        k = len(points)
+        if k == 0:
+            return 0
+
+        graph = [[] for _ in range(k)]
+        visited = [False] * k
+        for num1, point1 in enumerate(points):
+            for num2, point2 in enumerate(points):
+                if num2 != num1:
+                    graph[num1].append((abs(point1[0] - point2[0]) + abs(point1[1] - point2[1]), num2))
+
+        result = 0
+        visited[0] = True
+        heapify(graph[0])
+        for i in range(k - 1):
+            while visited[graph[0][0][1]]:
+                heappop(graph[0])
+            result += graph[0][0][0]
+            next_visit = graph[0][0][1]
+
+            for el in graph[next_visit]:
+                heappush(graph[0], el)
+
+            visited[next_visit] = True
+
         return result
 
 
@@ -136,7 +168,7 @@ s = Solution()
 print("Example 1:", s.minCostConnectPoints([[0, 0], [2, 2], [3, 10], [5, 2], [7, 0]]))  # 20
 print("Example 2:", s.minCostConnectPoints([[3, 12], [-2, 5], [-4, 1]]))  # 18
 print("Example 3:", s.minCostConnectPoints([[0, 0], [1, 1], [1, 0], [-1, 1]]))  # 4
-
+'''
 print("Example 4:", s.minCostConnectPoints(
     [[-8988, -8416], [-5299, 7210], [-5132, -6801], [-501, 4378], [-6429, -2747], [-6707, 7699], [4136, -6086],
      [6311, -5534], [-4114, -9305], [-8189, -9624], [9644, -4646], [-8520, 3180], [9018, -2556], [-5445, 4930],
@@ -205,3 +237,4 @@ print("Example 4:", s.minCostConnectPoints(
      [-6954, 5505], [-312, 4659], [-7728, 6193], [8092, -6396], [-909, 5334], [4077, 9062], [-2916, -2665],
      [-9831, 7040], [-9131, 2894], [-1036, -8186], [-4364, -5071], [-5484, 1140], [-9514, 6979], [-6770, 5050],
      [-9931, 6683], [-2080, 5690], [-4430, -5829], [8014, -7985], [5821, -8714], [5457, 9374], [-7217, 5224]]))  # 5
+'''
