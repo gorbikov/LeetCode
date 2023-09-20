@@ -88,6 +88,105 @@ class Solution:
             return result
 
 
+class Solution:
+    def minOperations(self, nums: list[int], x: int) -> int:
+        nums_len = len(nums)
+        acc_sum = 0
+        rows = None
+        columns = None
+        for i in range(nums_len):
+            acc_sum += nums[i]
+            if acc_sum >= x:
+                rows = i
+                break
+        acc_sum = 0
+        for i in range(nums_len):
+            acc_sum += nums[-i - 1]
+            if acc_sum >= x:
+                columns = i
+                break
+        if (rows is None) or (columns is None):
+            return -1
+        result = float("inf")
+        left_nums_sum = x
+        for count_left in range(rows + 2):
+            if count_left > result:
+                break
+            if count_left != 0:
+                left_nums_sum -= nums[count_left - 1]
+            if left_nums_sum < 0:
+                break
+            right_nums_sum = 0
+            for count_right in range(columns + 2):
+                if count_left + count_right > result:
+                    break
+                if count_right != 0:
+                    right_nums_sum += nums[-count_right]
+                delta = left_nums_sum - right_nums_sum
+                if delta == 0:
+                    result = min(result, count_left + count_right)
+                    break
+                if delta < 0:
+                    break
+        if result > nums_len:
+            return -1
+        else:
+            return result
+
+
+class Solution:
+    def minOperations(self, nums: list[int], x: int) -> int:
+        nums_len = len(nums)
+        result = float("inf")
+        left_nums_sum = x
+        count_left = 0
+        while count_left < result and count_left < nums_len + 1:
+            if count_left != 0:
+                left_nums_sum -= nums[count_left - 1]
+            if left_nums_sum < 0:
+                break
+            right_nums_sum = 0
+            count_right = 0
+            while count_left + count_right < result and count_right < nums_len + 1:
+                if count_right != 0:
+                    right_nums_sum += nums[-count_right]
+                delta = left_nums_sum - right_nums_sum
+                if delta == 0:
+                    result = min(result, count_left + count_right)
+                    break
+                if delta < 0:
+                    break
+                count_right += 1
+            count_left += 1
+        if result > nums_len:
+            return -1
+        else:
+            return result
+
+
+class Solution:
+    def minOperations(self, nums: list[int], x: int) -> int:
+        nums_sum = sum(nums)
+        nums_len = len(nums)
+        result = float("inf")
+        curr_sum = 0
+        left, right = 0, 0
+
+        if nums_sum < x:
+            return -1
+
+        while right < nums_len:
+            curr_sum += nums[right]
+            right += 1
+
+            while curr_sum > nums_sum - x:
+                curr_sum -= nums[left]
+                left += 1
+
+            if curr_sum == nums_sum - x:
+                result = min(result, nums_len - (right - left))
+        return -1 if result > nums_len else result
+
 s = Solution()
 print("Example 1:", s.minOperations([1, 1, 4, 2, 3], 5))  # 2
 print("Example 2:", s.minOperations([5, 6, 7, 8, 9], 4))  # -1
